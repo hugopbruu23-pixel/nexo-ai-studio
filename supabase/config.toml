@@ -1,0 +1,4 @@
+project_id = "xrcrawtrmllptmlvlmgp"
+
+[functions.nexo-chat]
+verify_jwt = false
