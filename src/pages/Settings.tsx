@@ -1,11 +1,9 @@
 import { motion } from "framer-motion";
 import { ArrowLeft, User, Bell, Palette, Shield, Globe, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Switch } from "@/components/ui/switch";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -22,6 +20,18 @@ const Settings = () => {
     toast.success("Configurações salvas com sucesso!");
   };
 
+  const inputStyle = {
+    background: "rgba(255,255,255,0.04)",
+    border: "1px solid rgba(255,255,255,0.1)",
+    borderRadius: 12,
+    padding: "8px 12px",
+    fontSize: 14,
+    color: "rgba(255,255,255,0.9)",
+    outline: "none",
+    width: "100%",
+    transition: "border-color 160ms ease",
+  };
+
   const sections = [
     {
       icon: User,
@@ -29,37 +39,41 @@ const Settings = () => {
       content: (
         <div className="space-y-4">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-secondary border border-border flex items-center justify-center">
-              <User className="w-8 h-8 text-muted-foreground" />
+            <div
+              className="w-16 h-16 rounded-2xl grid place-items-center"
+              style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}
+            >
+              <User className="w-8 h-8 text-white/50" />
             </div>
-            <div className="flex-1">
-              <Button variant="outline" size="sm" className="text-xs">
-                Alterar foto
-              </Button>
-            </div>
+            <button
+              className="px-3 py-1.5 rounded-xl text-xs font-medium text-white/70 transition hover:text-white/90 hover:bg-white/[0.06]"
+              style={{ border: "1px solid rgba(255,255,255,0.1)" }}
+            >
+              Alterar foto
+            </button>
           </div>
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">Nome</label>
-            <Input
+            <label className="text-[11px] text-white/45 uppercase tracking-wider mb-1 block">Nome</label>
+            <input
               value={profile.name}
               onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-              className="bg-secondary border-border"
+              style={inputStyle}
             />
           </div>
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">Email</label>
-            <Input
+            <label className="text-[11px] text-white/45 uppercase tracking-wider mb-1 block">Email</label>
+            <input
               value={profile.email}
               onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-              className="bg-secondary border-border"
+              style={inputStyle}
             />
           </div>
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">Bio</label>
-            <Input
+            <label className="text-[11px] text-white/45 uppercase tracking-wider mb-1 block">Bio</label>
+            <input
               value={profile.bio}
               onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
-              className="bg-secondary border-border"
+              style={inputStyle}
             />
           </div>
         </div>
@@ -71,8 +85,8 @@ const Settings = () => {
       content: (
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-foreground">Ativar notificações</p>
-            <p className="text-xs text-muted-foreground">Receba alertas sobre atualizações</p>
+            <p className="text-sm text-white/90">Ativar notificações</p>
+            <p className="text-xs text-white/50">Receba alertas sobre atualizações</p>
           </div>
           <Switch checked={notifications} onCheckedChange={setNotifications} />
         </div>
@@ -84,8 +98,8 @@ const Settings = () => {
       content: (
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-foreground">Modo escuro</p>
-            <p className="text-xs text-muted-foreground">Sempre ativo por padrão</p>
+            <p className="text-sm text-white/90">Modo escuro</p>
+            <p className="text-xs text-white/50">Sempre ativo por padrão</p>
           </div>
           <Switch checked={darkMode} disabled />
         </div>
@@ -96,11 +110,11 @@ const Settings = () => {
       title: "Idioma",
       content: (
         <div>
-          <label className="text-xs text-muted-foreground mb-1 block">Idioma da interface</label>
+          <label className="text-[11px] text-white/45 uppercase tracking-wider mb-1 block">Idioma da interface</label>
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            className="w-full bg-secondary border border-border rounded-md px-3 py-2 text-sm text-foreground"
+            style={{ ...inputStyle, cursor: "pointer" }}
           >
             <option value="pt-BR">Português (Brasil)</option>
             <option value="en">English</option>
@@ -116,15 +130,15 @@ const Settings = () => {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-foreground">Histórico de conversas</p>
-              <p className="text-xs text-muted-foreground">Salvar conversas localmente</p>
+              <p className="text-sm text-white/90">Histórico de conversas</p>
+              <p className="text-xs text-white/50">Salvar conversas localmente</p>
             </div>
             <Switch defaultChecked />
           </div>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-foreground">Compartilhar dados de uso</p>
-              <p className="text-xs text-muted-foreground">Ajude a melhorar o Nexo AI</p>
+              <p className="text-sm text-white/90">Compartilhar dados de uso</p>
+              <p className="text-xs text-white/50">Ajude a melhorar o Nexo AI</p>
             </div>
             <Switch />
           </div>
@@ -136,10 +150,9 @@ const Settings = () => {
       title: "Sobre o Nexo AI",
       content: (
         <div className="space-y-2">
-          <p className="text-sm text-foreground">Nexo AI v2.0</p>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-sm text-white/90">Nexo AI v2.0</p>
+          <p className="text-xs text-white/50">
             Plataforma de IA avançada com capacidades de chat, geração de imagens, código, vídeo e áudio.
-            Suporte a upload de arquivos e integrações externas.
           </p>
         </div>
       ),
@@ -147,7 +160,7 @@ const Settings = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <div className="max-w-2xl mx-auto px-4 py-8">
         {/* Header */}
         <motion.div
@@ -155,15 +168,19 @@ const Settings = () => {
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center gap-3 mb-8"
         >
-          <Button
-            variant="ghost"
-            size="sm"
+          <button
             onClick={() => navigate("/")}
-            className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+            className="grid h-9 w-9 place-items-center rounded-xl text-white/50 hover:text-white/80 hover:bg-white/[0.06] transition"
+            style={{ border: "1px solid rgba(255,255,255,0.08)" }}
           >
             <ArrowLeft className="w-4 h-4" />
-          </Button>
-          <h1 className="text-xl font-bold text-foreground tracking-tight">Configurações</h1>
+          </button>
+          <h1
+            className="text-xl font-bold tracking-[0.08em] uppercase"
+            style={{ color: "rgba(255,255,255,0.95)" }}
+          >
+            Configurações
+          </h1>
         </motion.div>
 
         {/* Sections */}
@@ -174,11 +191,11 @@ const Settings = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
-              className="rounded-xl border border-border bg-card p-5"
+              className="rounded-2xl p-5 nexo-panel"
             >
               <div className="flex items-center gap-2 mb-4">
-                <section.icon className="w-4 h-4 text-muted-foreground" />
-                <h2 className="text-sm font-semibold text-foreground">{section.title}</h2>
+                <section.icon className="w-4 h-4 text-white/50" />
+                <h2 className="text-sm font-semibold text-white/86">{section.title}</h2>
               </div>
               {section.content}
             </motion.div>
@@ -191,9 +208,17 @@ const Settings = () => {
           transition={{ delay: 0.3 }}
           className="mt-6"
         >
-          <Button onClick={handleSave} className="w-full">
+          <button
+            onClick={handleSave}
+            className="w-full py-2.5 rounded-2xl text-sm font-semibold transition"
+            style={{
+              background: "linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.8))",
+              color: "#000",
+              boxShadow: "0 0 14px rgba(255,255,255,0.2)",
+            }}
+          >
             Salvar Configurações
-          </Button>
+          </button>
         </motion.div>
       </div>
     </div>

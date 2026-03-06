@@ -1,7 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Search, Check, ExternalLink, Puzzle, Zap, Globe, Database, Mail, CreditCard, Bot, Cloud, MessageSquare, BarChart } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -28,7 +26,7 @@ const allIntegrations: Integration[] = [
   { id: "notion", name: "Notion", description: "Acesse páginas e bancos de dados do Notion", icon: Database, category: "Produtividade", url: "https://notion.so", connected: false },
   { id: "vercel", name: "Vercel", description: "Deploy automático de projetos web", icon: Zap, category: "Deploy", url: "https://vercel.com", connected: false },
   { id: "figma", name: "Figma", description: "Acesse designs e protótipos", icon: Puzzle, category: "Design", url: "https://figma.com", connected: false },
-  { id: "supabase", name: "Supabase", description: "Banco de dados, auth e storage", icon: Database, category: "Backend", url: "https://supabase.com", connected: false },
+  { id: "supabase_int", name: "Supabase", description: "Banco de dados, auth e storage", icon: Database, category: "Backend", url: "https://supabase.com", connected: false },
 ];
 
 const Integrations = () => {
@@ -65,7 +63,7 @@ const Integrations = () => {
   const connectedCount = integrations.filter((i) => i.connected).length;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <div className="max-w-3xl mx-auto px-4 py-8">
         {/* Header */}
         <motion.div
@@ -73,25 +71,33 @@ const Integrations = () => {
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center gap-3 mb-2"
         >
-          <Button
-            variant="ghost"
-            size="sm"
+          <button
             onClick={() => navigate("/")}
-            className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+            className="grid h-9 w-9 place-items-center rounded-xl text-white/50 hover:text-white/80 hover:bg-white/[0.06] transition"
+            style={{ border: "1px solid rgba(255,255,255,0.08)" }}
           >
             <ArrowLeft className="w-4 h-4" />
-          </Button>
-          <h1 className="text-xl font-bold text-foreground tracking-tight">Integrações</h1>
+          </button>
+          <h1
+            className="text-xl font-bold tracking-[0.08em] uppercase"
+            style={{ color: "rgba(255,255,255,0.95)" }}
+          >
+            Integrações
+          </h1>
         </motion.div>
 
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="text-sm text-muted-foreground mb-6 ml-11"
+          className="text-sm mb-6 ml-12"
+          style={{ color: "rgba(255,255,255,0.55)" }}
         >
-          Conecte serviços externos para turbinar o Nexo AI. {connectedCount > 0 && (
-            <span className="text-foreground font-medium">{connectedCount} ativa{connectedCount > 1 ? "s" : ""}</span>
+          Conecte serviços externos para turbinar o Nexo AI.{" "}
+          {connectedCount > 0 && (
+            <span className="font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>
+              {connectedCount} ativa{connectedCount > 1 ? "s" : ""}
+            </span>
           )}
         </motion.p>
 
@@ -102,12 +108,18 @@ const Integrations = () => {
           transition={{ delay: 0.15 }}
           className="relative mb-6"
         >
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "rgba(255,255,255,0.4)" }} />
+          <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Pesquisar integrações... (ex: GitHub, Stripe, Notion)"
-            className="pl-10 bg-secondary border-border"
+            className="w-full pl-10 pr-4 py-2.5 rounded-2xl text-sm outline-none"
+            style={{
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              color: "rgba(255,255,255,0.9)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06), 0 10px 24px rgba(0,0,0,0.24)",
+            }}
           />
         </motion.div>
 
@@ -115,7 +127,9 @@ const Integrations = () => {
         <div className="space-y-6">
           {categories.map((category) => (
             <div key={category}>
-              <h2 className="text-xs uppercase tracking-widest text-muted-foreground mb-3">{category}</h2>
+              <h2 className="text-[10px] uppercase tracking-[0.16em] mb-3" style={{ color: "rgba(255,255,255,0.45)" }}>
+                {category}
+              </h2>
               <div className="grid gap-3">
                 <AnimatePresence>
                   {filtered
@@ -127,49 +141,80 @@ const Integrations = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95 }}
                         transition={{ delay: idx * 0.03 }}
-                        className={`flex items-center gap-4 p-4 rounded-xl border transition-colors ${
-                          integration.connected
-                            ? "border-nexo-success/30 bg-nexo-success/5"
-                            : "border-border bg-card hover:bg-accent/50"
-                        }`}
+                        className="flex items-center gap-4 p-4 rounded-2xl transition-all"
+                        style={{
+                          background: integration.connected
+                            ? "rgba(50,200,100,0.04)"
+                            : "linear-gradient(180deg, rgba(255,255,255,0.022) 0%, rgba(255,255,255,0.014) 100%), rgba(255,255,255,0.02)",
+                          border: integration.connected
+                            ? "1px solid rgba(50,200,100,0.2)"
+                            : "1px solid rgba(255,255,255,0.075)",
+                          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06), 0 14px 30px rgba(0,0,0,0.35)",
+                        }}
                       >
-                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
-                          integration.connected ? "bg-nexo-success/20" : "bg-secondary"
-                        }`}>
-                          <integration.icon className={`w-5 h-5 ${
-                            integration.connected ? "text-nexo-success" : "text-muted-foreground"
-                          }`} />
+                        <div
+                          className="w-10 h-10 rounded-xl grid place-items-center shrink-0"
+                          style={{
+                            background: integration.connected ? "rgba(50,200,100,0.12)" : "rgba(255,255,255,0.06)",
+                            border: "1px solid " + (integration.connected ? "rgba(50,200,100,0.2)" : "rgba(255,255,255,0.08)"),
+                          }}
+                        >
+                          <integration.icon
+                            className="w-5 h-5"
+                            style={{ color: integration.connected ? "rgba(50,200,100,0.9)" : "rgba(255,255,255,0.5)" }}
+                          />
                         </div>
 
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <h3 className="text-sm font-medium text-foreground">{integration.name}</h3>
+                            <h3 className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>
+                              {integration.name}
+                            </h3>
                             {integration.connected && (
-                              <span className="flex items-center gap-1 text-[10px] text-nexo-success bg-nexo-success/10 px-1.5 py-0.5 rounded-full">
+                              <span
+                                className="flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full"
+                                style={{
+                                  color: "rgba(50,200,100,0.9)",
+                                  background: "rgba(50,200,100,0.1)",
+                                  border: "1px solid rgba(50,200,100,0.15)",
+                                }}
+                              >
                                 <Check className="w-2.5 h-2.5" /> Ativa
                               </span>
                             )}
                           </div>
-                          <p className="text-xs text-muted-foreground truncate">{integration.description}</p>
+                          <p className="text-xs truncate" style={{ color: "rgba(255,255,255,0.5)" }}>
+                            {integration.description}
+                          </p>
                         </div>
 
                         <div className="flex items-center gap-2 shrink-0">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+                          <button
+                            className="grid h-8 w-8 place-items-center rounded-lg text-white/40 hover:text-white/70 hover:bg-white/[0.06] transition"
                             onClick={() => window.open(integration.url, "_blank")}
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
-                          </Button>
-                          <Button
-                            variant={integration.connected ? "outline" : "default"}
-                            size="sm"
-                            className="text-xs h-8"
+                          </button>
+                          <button
                             onClick={() => toggleIntegration(integration.id)}
+                            className="px-3 py-1.5 rounded-xl text-xs font-medium transition"
+                            style={
+                              integration.connected
+                                ? {
+                                    background: "transparent",
+                                    border: "1px solid rgba(255,255,255,0.14)",
+                                    color: "rgba(255,255,255,0.7)",
+                                  }
+                                : {
+                                    background: "linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.8))",
+                                    color: "#000",
+                                    border: "none",
+                                    boxShadow: "0 0 10px rgba(255,255,255,0.15)",
+                                  }
+                            }
                           >
                             {integration.connected ? "Desconectar" : "Conectar"}
-                          </Button>
+                          </button>
                         </div>
                       </motion.div>
                     ))}
@@ -185,8 +230,10 @@ const Integrations = () => {
             animate={{ opacity: 1 }}
             className="text-center py-12"
           >
-            <Puzzle className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
-            <p className="text-sm text-muted-foreground">Nenhuma integração encontrada para "{search}"</p>
+            <Puzzle className="w-12 h-12 mx-auto mb-3" style={{ color: "rgba(255,255,255,0.15)" }} />
+            <p className="text-sm" style={{ color: "rgba(255,255,255,0.5)" }}>
+              Nenhuma integração encontrada para "{search}"
+            </p>
           </motion.div>
         )}
       </div>
