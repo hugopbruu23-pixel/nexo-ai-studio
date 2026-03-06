@@ -10,14 +10,7 @@ import {
   Music,
   X,
   FileText,
-  ImageIcon,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 interface AttachedFile {
   name: string;
@@ -32,10 +25,10 @@ interface ChatInputProps {
 
 const modes = [
   { id: "chat", icon: Sparkles, label: "Chat" },
-  { id: "image", icon: Image, label: "Gerar Imagem" },
-  { id: "code", icon: FileCode, label: "Gerar Código" },
-  { id: "video", icon: Video, label: "Gerar Vídeo" },
-  { id: "audio", icon: Music, label: "Gerar Áudio" },
+  { id: "image", icon: Image, label: "Imagem" },
+  { id: "code", icon: FileCode, label: "Código" },
+  { id: "video", icon: Video, label: "Vídeo" },
+  { id: "audio", icon: Music, label: "Áudio" },
 ];
 
 export const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
@@ -50,9 +43,7 @@ export const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
     onSend(input.trim(), mode, attachedFiles.length > 0 ? attachedFiles : undefined);
     setInput("");
     setAttachedFiles([]);
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-    }
+    if (textareaRef.current) textareaRef.current.style.height = "auto";
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -73,9 +64,8 @@ export const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
-
     Array.from(files).forEach((file) => {
-      if (file.size > 20 * 1024 * 1024) return; // 20MB limit
+      if (file.size > 20 * 1024 * 1024) return;
       const reader = new FileReader();
       reader.onload = () => {
         setAttachedFiles((prev) => [
@@ -95,30 +85,22 @@ export const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
   const activeMode = modes.find((m) => m.id === mode)!;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="p-4 border-t border-border bg-background"
-    >
+    <div className="px-4 pb-4 pt-2">
       {/* Mode selector */}
-      <div className="flex gap-1 mb-3">
+      <div className="flex gap-1.5 mb-3">
         {modes.map((m) => (
-          <Tooltip key={m.id}>
-            <TooltipTrigger asChild>
-              <button
-                onClick={() => setMode(m.id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${
-                  mode === m.id
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-muted-foreground hover:text-foreground hover:bg-accent"
-                }`}
-              >
-                <m.icon className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">{m.label}</span>
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>{m.label}</TooltipContent>
-          </Tooltip>
+          <button
+            key={m.id}
+            onClick={() => setMode(m.id)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-medium uppercase tracking-wider transition-all duration-200 ${
+              mode === m.id
+                ? "bg-white/[0.15] text-white border border-white/[0.2] shadow-[0_8px_20px_rgba(0,0,0,0.3)]"
+                : "bg-white/[0.035] text-white/60 border border-white/[0.06] hover:bg-white/[0.06] hover:text-white/80"
+            }`}
+          >
+            <m.icon className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">{m.label}</span>
+          </button>
         ))}
       </div>
 
@@ -137,15 +119,19 @@ export const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.8, opacity: 0 }}
-                className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-secondary border border-border text-xs"
+                className="flex items-center gap-1.5 px-2 py-1 rounded-xl text-xs"
+                style={{
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                }}
               >
                 {file.type.startsWith("image/") ? (
                   <img src={file.dataUrl} alt="" className="w-6 h-6 rounded object-cover" />
                 ) : (
-                  <FileText className="w-3.5 h-3.5 text-muted-foreground" />
+                  <FileText className="w-3.5 h-3.5 text-white/50" />
                 )}
-                <span className="truncate max-w-[100px] text-muted-foreground">{file.name}</span>
-                <button onClick={() => removeFile(i)} className="text-muted-foreground hover:text-foreground">
+                <span className="truncate max-w-[100px] text-white/70">{file.name}</span>
+                <button onClick={() => removeFile(i)} className="text-white/40 hover:text-white/80">
                   <X className="w-3 h-3" />
                 </button>
               </motion.div>
@@ -155,28 +141,30 @@ export const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
       </AnimatePresence>
 
       {/* Input area */}
-      <div className="flex items-end gap-2 nexo-glass rounded-xl p-2">
+      <div
+        className="flex items-end gap-2 rounded-2xl p-2"
+        style={{
+          border: "1px solid rgba(255,255,255,0.1)",
+          background: "linear-gradient(180deg, rgba(255,255,255,0.028) 0%, rgba(255,255,255,0.016) 100%), rgba(255,255,255,0.02)",
+          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06), 0 14px 30px rgba(0,0,0,0.35)",
+        }}
+      >
         <input
           ref={fileInputRef}
           type="file"
           multiple
-          accept="image/*,text/*,.pdf,.doc,.docx,.js,.ts,.tsx,.jsx,.py,.json,.csv,.html,.css,.md"
+          accept="image/*,video/*,audio/*,text/*,.pdf,.doc,.docx,.js,.ts,.tsx,.jsx,.py,.json,.csv,.html,.css,.md"
           onChange={handleFileSelect}
           className="hidden"
         />
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-9 w-9 p-0 text-muted-foreground hover:text-foreground shrink-0"
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <Paperclip className="w-4 h-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Anexar arquivo</TooltipContent>
-        </Tooltip>
+        <button
+          id="attachBtn"
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          className="grid h-9 w-9 min-w-[36px] min-h-[36px] place-items-center rounded-xl text-white/50 hover:text-white/80 hover:bg-white/[0.06] transition"
+        >
+          <Paperclip className="w-[18px] h-[18px]" />
+        </button>
 
         <textarea
           ref={textareaRef}
@@ -187,17 +175,21 @@ export const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
           placeholder={`${activeMode.label}... Digite sua mensagem`}
           disabled={disabled}
           rows={1}
-          className="flex-1 bg-transparent border-none outline-none resize-none text-sm text-foreground placeholder:text-muted-foreground py-2 px-2 min-h-[40px] max-h-[200px] font-sans"
+          className="flex-1 bg-transparent border-none outline-none resize-none text-[15px] text-white/92 placeholder:text-white/40 py-2 px-2 min-h-[40px] max-h-[200px] font-sans leading-relaxed"
         />
-        <Button
+        <button
           onClick={handleSend}
           disabled={(!input.trim() && attachedFiles.length === 0) || disabled}
-          size="sm"
-          className="rounded-lg h-9 w-9 p-0 bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-30 transition-all shrink-0"
+          className="grid h-9 w-9 min-w-[36px] min-h-[36px] place-items-center rounded-xl transition-all shrink-0 disabled:opacity-20"
+          style={{
+            background: "linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.8))",
+            color: "#000",
+            boxShadow: "0 0 14px rgba(255,255,255,0.2)",
+          }}
         >
           <Send className="w-4 h-4" />
-        </Button>
+        </button>
       </div>
-    </motion.div>
+    </div>
   );
 };

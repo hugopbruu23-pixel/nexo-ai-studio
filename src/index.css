@@ -2,55 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    --background: 0 0% 4%;
-    --foreground: 0 0% 95%;
+    color-scheme: dark;
 
-    --card: 0 0% 7%;
-    --card-foreground: 0 0% 95%;
+    --background: 0 0% 2%;
+    --foreground: 0 0% 94%;
 
-    --popover: 0 0% 7%;
-    --popover-foreground: 0 0% 95%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 94%;
+
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 94%;
 
     --primary: 0 0% 100%;
     --primary-foreground: 0 0% 0%;
 
-    --secondary: 0 0% 12%;
+    --secondary: 0 0% 8%;
     --secondary-foreground: 0 0% 90%;
 
-    --muted: 0 0% 15%;
+    --muted: 0 0% 12%;
     --muted-foreground: 0 0% 55%;
 
-    --accent: 0 0% 18%;
-    --accent-foreground: 0 0% 95%;
+    --accent: 0 0% 10%;
+    --accent-foreground: 0 0% 94%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 16%;
-    --input: 0 0% 16%;
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
     --ring: 0 0% 40%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 5%;
+    --sidebar-background: 0 0% 0%;
     --sidebar-foreground: 0 0% 70%;
     --sidebar-primary: 0 0% 100%;
     --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 0 0% 12%;
-    --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 0 0% 12%;
+    --sidebar-accent: 0 0% 8%;
+    --sidebar-accent-foreground: 0 0% 94%;
+    --sidebar-border: 0 0% 10%;
     --sidebar-ring: 0 0% 30%;
 
     --nexo-glow: 0 0% 100%;
     --nexo-dim: 0 0% 35%;
-    --nexo-surface: 0 0% 8%;
-    --nexo-hover: 0 0% 14%;
+    --nexo-surface: 0 0% 5%;
+    --nexo-hover: 0 0% 10%;
     --nexo-success: 142 76% 36%;
     --nexo-info: 217 91% 60%;
+
+    --bg-panel: 0 0% 100% / 0.02;
+    --bg-panel-strong: 0 0% 100% / 0.032;
+    --bg-panel-hover: 0 0% 100% / 0.05;
+    --border-soft: 0 0% 100% / 0.14;
+    --border-faint: 0 0% 100% / 0.095;
+    --border-subtle: 0 0% 100% / 0.075;
+    --text-main: 0 0% 100% / 0.94;
+    --text-muted-ref: 0 0% 100% / 0.72;
+    --text-soft: 0 0% 100% / 0.6;
+    --shadow-soft: 0 14px 28px rgba(0, 0, 0, 0.2);
+    --shadow-faint: 0 8px 20px rgba(0, 0, 0, 0.18);
+    --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
 
     font-family: 'Space Grotesk', sans-serif;
   }
@@ -63,31 +78,69 @@
 
   body {
     @apply bg-background text-foreground antialiased;
+    background-image:
+      radial-gradient(circle at 16% 14%, rgba(255, 255, 255, 0.04), transparent 34%),
+      radial-gradient(circle at 86% 84%, rgba(255, 255, 255, 0.03), transparent 36%),
+      linear-gradient(180deg, hsl(0 0% 4%) 0%, hsl(0 0% 1%) 100%);
+    letter-spacing: 0.01em;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgba(255, 255, 255, 0.22);
+    color: #fff;
   }
 
   ::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    background: hsl(var(--background));
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: hsl(var(--muted));
-    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    border: 1px solid transparent;
+    background-clip: content-box;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--muted-foreground));
+    background: rgba(255, 255, 255, 0.28);
   }
 }
 
 @layer utilities {
   .nexo-glass {
-    background: hsl(var(--nexo-surface) / 0.8);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.022) 0%, rgba(255, 255, 255, 0.014) 100%),
+      rgba(255, 255, 255, 0.02);
     backdrop-filter: blur(20px);
-    border: 1px solid hsl(var(--border));
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.075);
+    box-shadow: var(--shadow-faint);
+  }
+
+  .nexo-glass-strong {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.032) 0%, rgba(255, 255, 255, 0.02) 100%),
+      rgba(255, 255, 255, 0.032);
+    backdrop-filter: blur(20px) saturate(120%);
+    -webkit-backdrop-filter: blur(20px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.095);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .nexo-panel {
+    border: 1px solid rgba(255, 255, 255, 0.075);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.022) 0%, rgba(255, 255, 255, 0.014) 100%),
+      rgba(255, 255, 255, 0.02);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 14px 30px rgba(0, 0, 0, 0.35);
   }
 
   .nexo-glow-text {
@@ -98,6 +151,10 @@
   .nexo-pulse-ring {
     box-shadow: 0 0 0 0 hsl(var(--nexo-glow) / 0.4);
     animation: nexo-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .nexo-sidebar-gradient {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, transparent 50%, rgba(0, 0, 0, 0.35) 100%);
   }
 }
 
@@ -144,4 +201,54 @@
 @keyframes nexo-shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
+}
+
+/* Boot screen animations */
+@keyframes nexo-boot-orbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes nexo-boot-orbit-reverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes nexo-boot-float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-3px) scale(1.015); }
+}
+
+@keyframes nexo-boot-panel-enter {
+  0% { opacity: 0; transform: translateY(20px) scale(0.972); filter: blur(8px); }
+  65% { opacity: 1; transform: translateY(-1px) scale(1.006); filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+@keyframes nexo-boot-progress-flow {
+  from { background-position: 0 0; }
+  to { background-position: 220% 0; }
+}
+
+@keyframes nexo-boot-progress-scan {
+  0% { transform: translateX(-8%) skewX(-24deg); opacity: 0; }
+  18% { opacity: 0.45; }
+  50% { opacity: 0.72; }
+  82% { opacity: 0.45; }
+  100% { transform: translateX(540%) skewX(-24deg); opacity: 0; }
+}
+
+@keyframes nexo-boot-grid-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(42px, 42px, 0); }
+}
+
+@keyframes nexo-boot-shine {
+  0%, 100% { transform: rotate(0deg) scale(0.95); opacity: 0.32; }
+  50% { transform: rotate(20deg) scale(1.08); opacity: 0.62; }
+}
+
+@keyframes nexo-boot-head-pulse {
+  0%, 100% { transform: translateY(-50%) scale(0.95); opacity: 0.78; }
+  50% { transform: translateY(-50%) scale(1.03); opacity: 1; }
 }

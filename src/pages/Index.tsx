@@ -6,6 +6,7 @@ import { ChatInput } from "@/components/chat/ChatInput";
 import { MessageBubble } from "@/components/chat/MessageBubble";
 import { ThinkingAnimation } from "@/components/chat/ThinkingAnimation";
 import { CodePreview } from "@/components/chat/CodePreview";
+import { NexoIntro } from "@/components/NexoIntro";
 import { streamChat, Msg } from "@/lib/chat-stream";
 import { toast } from "sonner";
 import { saveAs } from "file-saver";
@@ -15,6 +16,7 @@ interface ConvMessages {
 }
 
 const Index = () => {
+  const [showIntro, setShowIntro] = useState(true);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConvId, setActiveConvId] = useState<string | null>(null);
@@ -24,8 +26,9 @@ const Index = () => {
   const [previewCode, setPreviewCode] = useState<{ code: string; lang: string } | null>(null);
 
   const scrollRef = useRef<HTMLDivElement>(null);
-
   const messages = activeConvId ? convMessages[activeConvId] || [] : [];
+
+  const sidebarWidth = sidebarCollapsed ? 72 : 280;
 
   const scrollToBottom = useCallback(() => {
     setTimeout(() => {
@@ -50,7 +53,11 @@ const Index = () => {
     return id;
   };
 
-  const handleSend = async (input: string, mode = "chat", files?: { name: string; type: string; dataUrl: string }[]) => {
+  const handleSend = async (
+    input: string,
+    mode = "chat",
+    files?: { name: string; type: string; dataUrl: string }[]
+  ) => {
     let convId = activeConvId;
     if (!convId) {
       convId = createConversation(input || files?.[0]?.name || "Novo Chat");
@@ -58,7 +65,9 @@ const Index = () => {
       const msgs = convMessages[convId] || [];
       if (msgs.length === 0) {
         setConversations((prev) =>
-          prev.map((c) => (c.id === convId ? { ...c, title: (input || files?.[0]?.name || "Novo Chat").slice(0, 40) } : c))
+          prev.map((c) =>
+            c.id === convId ? { ...c, title: (input || files?.[0]?.name || "Novo Chat").slice(0, 40) } : c
+          )
         );
       }
     }
@@ -134,8 +143,12 @@ const Index = () => {
     toast.success(`Arquivo ${filename} baixado!`);
   };
 
+  if (showIntro) {
+    return <NexoIntro onFinish={() => setShowIntro(false)} />;
+  }
+
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-background">
+    <div className="flex h-screen w-full overflow-hidden">
       <ChatSidebar
         conversations={conversations}
         activeId={activeConvId}
@@ -155,7 +168,10 @@ const Index = () => {
       />
 
       {/* Main chat area */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div
+        className="flex-1 flex flex-col min-w-0 transition-[margin] duration-300"
+        style={{ marginLeft: sidebarWidth }}
+      >
         <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 md:px-8 py-6">
           {messages.length === 0 && !isLoading ? (
             <motion.div
@@ -166,16 +182,25 @@ const Index = () => {
               <motion.div
                 animate={{ scale: [1, 1.05, 1], opacity: [0.7, 1, 0.7] }}
                 transition={{ duration: 4, repeat: Infinity }}
-                className="w-20 h-20 rounded-2xl bg-secondary flex items-center justify-center border border-border"
+                className="w-20 h-20 rounded-2xl flex items-center justify-center"
+                style={{
+                  background: "linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.04))",
+                  border: "1px solid rgba(255,255,255,0.14)",
+                  boxShadow: "0 14px 30px rgba(0,0,0,0.5), 0 0 24px rgba(255,255,255,0.1)",
+                }}
               >
-                <Sparkles className="w-10 h-10 text-foreground/60" />
+                <Sparkles className="w-10 h-10 text-white/70" />
               </motion.div>
               <div className="text-center max-w-md">
-                <h1 className="text-2xl font-bold text-foreground mb-2 tracking-tight">
+                <h1
+                  className="text-2xl font-bold mb-2 tracking-[0.12em] uppercase"
+                  style={{ color: "rgba(255,255,255,0.95)", textShadow: "0 8px 22px rgba(255,255,255,0.14)" }}
+                >
                   Nexo AI
                 </h1>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  Chat, geração de imagens, código, áudio e vídeo. Anexe arquivos para análise. Crie, edite e baixe qualquer coisa.
+                <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.55)" }}>
+                  Chat, geração de imagens, código, áudio e vídeo. Anexe arquivos para análise.
+                  Crie, edite e baixe qualquer coisa.
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-2 mt-4">
@@ -187,10 +212,16 @@ const Index = () => {
                 ].map((suggestion) => (
                   <motion.button
                     key={suggestion}
-                    whileHover={{ scale: 1.02 }}
+                    whileHover={{ scale: 1.02, y: -1 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => handleSend(suggestion)}
-                    className="px-4 py-3 rounded-xl bg-secondary/50 border border-border text-xs text-muted-foreground hover:text-foreground hover:bg-accent transition-colors text-left"
+                    className="px-4 py-3 rounded-2xl text-xs text-left transition-all"
+                    style={{
+                      background: "rgba(255,255,255,0.035)",
+                      border: "1px solid rgba(255,255,255,0.075)",
+                      color: "rgba(255,255,255,0.6)",
+                      boxShadow: "0 8px 20px rgba(0,0,0,0.24)",
+                    }}
                   >
                     {suggestion}
                   </motion.button>
